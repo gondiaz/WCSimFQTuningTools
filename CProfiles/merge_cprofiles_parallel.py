@@ -13,9 +13,9 @@ from itertools import groupby
 from os.path   import expandvars, realpath, join, basename
 
 
-def process_momentum(momentum, files, htype, lock, verbose=False):
+def process_momentum(pid, momentum, files, htype, lock, verbose=False):
 
-    if verbose: print(f"Processing {momentum} MeV/c files...".ljust(50))
+    if verbose: print(f"Processing {momentum} MeV/c files for {pid}...".ljust(50))
 
     nevents = 0
     # start with array to accumulate histogram entries
@@ -45,7 +45,7 @@ def process_momentum(momentum, files, htype, lock, verbose=False):
     for ix, iy in itertools.product(range(1, len(thbins)), range(1, len(sbins))): th2d.SetBinContent(ix, iy, h[ix-1, iy-1])
 
     with lock:
-        fout = ROOT.TFile("cprofiles_merged.root", "UPDATE")
+        fout = ROOT.TFile(f"cprofiles_{pid}_merged.root", "UPDATE")
         fout.WriteObject(th2d, f"g_{momentum}")
         fout.Close()
 
@@ -71,10 +71,22 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true")
 
     parser.add_argument( "indir", type=str, nargs=1, help = "directory containing produced files")
+    parser.add_argument( "pid", type=str, help = "particle type (eg e-, mu+...", default="all")
     parser.add_argument(  "type", type=str, nargs=1, help = "type of cherenkov profile, true (tr) or weighted (wt)") # modify this, it can be tr/wt
     
     args = parser.parse_args()
     ##########################################
+
+    output_file = "cprofiles_merged.root"
+    # check pid
+    if args.pid == "all":
+        print("Merging all files")
+    elif args.pid in ["e-", "e+", "mu-", "mu+", "pi-", "pi+"]:
+        print(f"Merging {args.pid} files")
+        output_file = f"cprofiles_{args.pid}_merged.root"
+    else:
+        print(f"Unknown parameter: {args.pid}, should be e-, e+, mu-, mu+, pi-, pi+")
+        exit(1)
 
     # check if type is tr or wt
     if args.type[0] not in ["tr", "wt"]: raise Exception("Type must be one of tr or wt")
@@ -84,7 +96,10 @@ def main():
 
     # get all files in input dir, filter out the '_flat.root' and sort them based on (momentum, index)
     infiles = glob.glob(join(args.indir[0], "*"))
-    infiles = [f for f in infiles if re.match("out_([^_]+)_\d+(?:\.\d+)?_\d+.root", basename(f))]
+    if args.pid == "all":
+        infiles = [f for f in infiles if re.match("out_([^_]+)_\d+(?:\.\d+)?_\d+.root", basename(f))]
+    else:
+        infiles = [f for f in infiles if re.match(f"out_{args.pid}_\d+(?:\.\d+)?_\d+.root", basename(f))]
     infiles = sorted(infiles, key=get_momentum_and_index)
 
     # split input files in momentum groups
@@ -92,7 +107,7 @@ def main():
     groups = [list(group) for key, group in groupby(infiles, key=lambda x: get_momentum_and_index(x)[0])]
 
     # create output file
-    fout = ROOT.TFile("cprofiles_merged.root", "RECREATE")
+    fout = ROOT.TFile(output_file, "RECREATE")
     fout.Close()
 
     # paralellize loop over momenta to fill histograms
@@ -100,7 +115,7 @@ def main():
     with multiprocessing.Manager() as manager:
         lock = manager.Lock()
         with concurrent.futures.ProcessPoolExecutor(max_workers=os.cpu_count()) as executor:
-            future_to_momentum = {executor.submit(process_momentum, momentum, files, args.type[0], lock, args.verbose): momentum for momentum, files in zip(momenta, groups)}
+            future_to_momentum = {executor.submit(process_momentum, args.pid, momentum, files, args.type[0], lock, args.verbose): momentum for momentum, files in zip(momenta, groups)}
 
             # get results once all the tasks are finished
             for future in concurrent.futures.as_completed(future_to_momentum):
@@ -117,7 +132,7 @@ def main():
     nphotons = results["nphotons"].copy()
     sthrs    = results["sthrs"]   .copy()
 
-    fout = ROOT.TFile("cprofiles_merged.root", "UPDATE")
+    fout = ROOT.TFile(output_file, "UPDATE")
 
     # save mean number of photons per momentum
     g = ROOT.TGraph(len(momenta), momenta, nphotons)
