@@ -77,10 +77,10 @@ def main():
     args = parser.parse_args()
     ##########################################
 
-    output_file = "cprofiles_merged.root"
-    # check pid
+    # check pid and define output file 
     if args.pid == "all":
         print("Merging all files")
+        output_file = "cprofiles_merged.root"
     elif args.pid in ["e-", "e+", "mu-", "mu+", "pi-", "pi+"]:
         print(f"Merging {args.pid} files")
         output_file = f"cprofiles_{args.pid}_merged.root"
