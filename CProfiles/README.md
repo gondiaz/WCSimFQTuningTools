@@ -4,7 +4,7 @@ Follow the steps to generate the Cherenkov profiles tuning file:
 
 **Important comments**:
 - Before producing the Cherenkov Profiles, check the 2D histogram binning is reasonable in the WCSimFQTuner (_WCSimFQTunerCherenkovProfile.cc_).
-  This can be done by opening any of the produced WCSim file and look at the `trg` TH2D histogram; this can be done using the  
+  This can be done by opening any of the produced WCSim files and look at the `trg` TH2D histogram; this can be done using the  
 - The tools assume that the distance units are `mm` in the simulation files, and transformed to `cm` in the step 1).
 - Make sure ROOT is setup (in order to be able to `import ROOT`) 
 
@@ -28,3 +28,7 @@ The output file format is the same as the required by fiTQun, but must be rename
 ### **Analysis**
 
 Contains jupyter-notebooks to check distributions for each production step and compare with previous implementation.
+
+### Check 2D histograms with WCSimFQTuner/WCSimFQTunerCherenkovProfile
+
+Todo: add instructions

@@ -71,7 +71,7 @@ def main():
     parser.add_argument("-v", "--verbose", action="store_true")
 
     parser.add_argument( "indir", type=str, nargs=1, help = "directory containing produced files")
-    parser.add_argument( "pid", type=str, help = "particle type (eg e-, mu+...", default="all")
+    parser.add_argument(   "pid", type=str,          help = "particle type (eg e-, mu+...", default="all")
     parser.add_argument(  "type", type=str, nargs=1, help = "type of cherenkov profile, true (tr) or weighted (wt)") # modify this, it can be tr/wt
     
     args = parser.parse_args()
@@ -79,10 +79,10 @@ def main():
 
     # check pid and define output file 
     if args.pid == "all":
-        print("Merging all files")
+        if args.verbose: print("Merging all files")
         output_file = "cprofiles_merged.root"
     elif args.pid in ["e-", "e+", "mu-", "mu+", "pi-", "pi+"]:
-        print(f"Merging {args.pid} files")
+        if args.verbose: print(f"Merging {args.pid} files")
         output_file = f"cprofiles_{args.pid}_merged.root"
     else:
         print(f"Unknown parameter: {args.pid}, should be e-, e+, mu-, mu+, pi-, pi+")

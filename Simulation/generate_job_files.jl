@@ -33,7 +33,7 @@ for taskfiles in Iterators.partition(task_files, ntasks_per_job)
     for f in taskfiles
         tasks *= "srun -n 1 --exclusive $f &\n"
     end
-#     tasks = chopsuffix(tasks, "&\n")
+    tasks = chopsuffix(tasks, "&\n")
     tasks *= "\nwait"
     
     # replace variables into job and write it
