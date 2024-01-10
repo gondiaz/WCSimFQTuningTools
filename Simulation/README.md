@@ -21,7 +21,7 @@ The simulations are configured by the `config.jl` file, with the parameters desc
 The procedure to create the macro files, tasks and jobs is the following:
 1) First modify the `config.jl` file parameters as required.
 2) Modify the macro, task and job templates as desired. Notice that we define two types of macros, the *base* and the *config* macros. The *base* macro defines the set of fixed parameters for the particular simulation type, and the *config* the *settable* parameters, which are defined with a preceding `$` symbol.
-The *_base* macros correspond to WCTE simulations used for the fiTQun tuning.
+The default *_base* macros included in the templates directory correspond to WCTE simulations used for the fiTQun tuning.
 For your own geometry (HK, SK, other), you might need to define your own macros and change these in the *config.jl* file.
 3) Run the scripts in the following order to produce the jobs
     1) `julia generate_macro_files.jl`
