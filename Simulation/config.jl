@@ -24,12 +24,14 @@ module Parameters
 
        config_variables  = Dict( "momentum" => range(100, 1000, step=10)
                                , "particle" => ["e-"])
+       # For Cherenkov profiles
        # config_variables = Dict( "particle" => ["e-"])
        # config_variables = Dict( "true_charge" => vcat( range(0.1, 1.9, step=0.1)
        #                                               , range(2.0, 4.5, step=0.5)
        #                                               , range(5.0, 9.0, step=1)
        #                                               , range(  10, 19, step=2)
        #                                               , range(  20, 50, step=5)))
+       # For Charge PDF
        # config_variables = Dict("particle" => ["e-"], "energy" => range(100, 1000, step=100))
 
        queue_command  = pipeline(`squeue -ah`, `wc -l`)
