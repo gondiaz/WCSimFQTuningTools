@@ -12,7 +12,7 @@ Follow the steps to generate the Cherenkov profiles tuning file:
 
 **Step 2** Run `integrate_cprofiles.py`: integrates the cherenkov profiles for each momentum to produce the $I_n = \int g(s, \cos\theta) s^n ~~ (n=0, 1, 2)$. Reads the **cprofiles_merged.root** (default) created at 2. Returns a **cprofiles_integrals.root** file.
 
-Run it using `python integrate_cprofiles.py r0max, nr0bins, nth0bins [-i merged_file.root] [-v]` where:
+Run it using `python integrate_cprofiles.py r0max nr0bins nth0bins [-i merged_file.root] [-v]` where:
 - **r0max**: maximum $r_0$ distance in mm, ie distance between PMT and track vertex.
 - **nr0bins**: number of $r_0$ bins.
 - **nth0bins**: number of $\cos \theta_0$ bins, with $\cos \theta_0 \in [-1, +1]$.

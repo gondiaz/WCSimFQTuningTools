@@ -7,7 +7,7 @@ import numpy  as np
 
 from os.path   import expandvars, join, basename
 
-from STable_tools import split_tubeids, clockwise_angle
+from STable_tools import split_tubeids, clockwise_azimuth_angle
 
 
 def main():
@@ -157,9 +157,9 @@ def main():
         # z_PMT used for side table, R_PMT used for bottom and top
         z_PMT = tubepos[:, 2]
         R_PMT = np.sum(tubepos[:, (0, 1)]**2, axis=1)**0.5
-        phi   = clockwise_angle(tubepos, srcpos)
+        phi   = clockwise_azimuth_angle(tubepos, srcpos)
         zd    = srcdir[:, 2]
-        theta = clockwise_angle(srcdir, tubepos-srcpos)
+        theta = clockwise_azimuth_angle(srcdir, tubepos-srcpos)
 
         # transform from mm to cm
         zs    *= 0.1

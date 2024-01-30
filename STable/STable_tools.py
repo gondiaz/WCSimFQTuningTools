@@ -3,7 +3,7 @@ import itertools
 import numpy  as np
 import pandas as pd
 
-from os.path   import expandvars
+from os.path import expandvars
 
 def read_wcsim_geometry(filename):
 
@@ -82,22 +82,22 @@ def split_tubeids(filename, vaxis=2):
 
 def azimuth_angle(v):
     """
-    Computes the azimuth angle [0, 2pi) in radians for the vector **v**
+    Computes the azimuth angle [0, 2pi) in radians for the 3D vector **v**
     Assumes that first and second entries are the X and Y projections
     **v** can be an array of vectors, ie an array of shape (# of vectors, vector dimension)
     """
     # between [-pi, pi]
     m   = np.linalg.norm(v[:, (0, 1)], axis=1)
-    px  = v[:, 0] / m
+    with np.errstate(divide="ignore", invalid="ignore"): px = v[:, 0] / m
     phi = np.arccos(px)
     sel = (v[:, 1] != 0)
     phi[sel] = np.sign(v[sel, 1]) * phi[sel]
     # transform to [0, 2pi)
     phi[phi<0] += 2.*np.pi
-    return phi
+    return np.nan_to_num(phi, nan=0.)
 
 
-def clockwise_angle(v1, v2):
+def clockwise_azimuth_angle(v1, v2):
     """Returns clockwise angle between the two vectors"""
     angles = np.zeros(len(v1))
     a1 = azimuth_angle(v1)

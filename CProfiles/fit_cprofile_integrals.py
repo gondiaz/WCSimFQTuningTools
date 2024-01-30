@@ -186,7 +186,7 @@ def main():
         fout.WriteObject(th2d_nsect, f"hI3d_nsect_{n}")
     
     # Add hprofinf
-    hprofinf = ROOT.TH1F("hprofinf", "hprofinf", 6,  np.arange(-0.5, 6.5, 0.5))
+    hprofinf = ROOT.TH1F("hprofinf", "hprofinf", 6, np.arange(-0.5, 6.5, 0.5))
     hprofinf.SetBinContent(1, npars)
     hprofinf.SetBinContent(2, nsectmax)          # not really used in fiTQun
     hprofinf.SetBinContent(3, 0)                 # momentum offset

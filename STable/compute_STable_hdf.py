@@ -8,7 +8,7 @@ import tables as tb
 
 from os.path   import expandvars, join, basename
 
-from STable_tools import split_tubeids, clockwise_angle, read_wcsim_geometry
+from STable_tools import split_tubeids, clockwise_azimuth_angle, read_wcsim_geometry
 
 
 def main():
@@ -123,6 +123,7 @@ def main():
     # define tables group tables
     tables_group = fout.create_group("/", "tables", "tables")
 
+    # TODO: parallelize
     for tabname in tabnames:
 
         if args.verbose: print(f">> Creating {tabname} table...")
@@ -157,9 +158,9 @@ def main():
             # Compute scattering table variables (transform from mm to cm)
             zs    = 0.1*srcpos[:, 2]
             Rs    = 0.1*np.sqrt(np.sum(srcpos[:, (0, 1)]**2, axis=1))
-            phi   = clockwise_angle(tubepos, srcpos)
+            phi   = clockwise_azimuth_angle(tubepos, srcpos)
             zd    = srcdir[:, 2]
-            theta = clockwise_angle(srcdir, tubepos-srcpos)
+            theta = clockwise_azimuth_angle(srcdir, tubepos-srcpos)
             # z_PMT used for side table, R_PMT used for bottom and top
             z_PMT = 0.1*tubepos[:, 2]
             R_PMT = 0.1*np.sqrt(np.sum(tubepos[:, (0, 1)]**2, axis=1))

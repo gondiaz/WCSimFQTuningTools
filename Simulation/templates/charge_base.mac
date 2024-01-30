@@ -4,17 +4,22 @@
 
 /WCSim/WCgeom nuPRISMBeamTest_16cShort_mPMT
 /WCSim/Geometry/RotateBarrelHalfTower true
-/WCSim/PMT/ReplicaPlacement true
+/WCSim/PMT/ReplicaPlacement false
 /WCSim/PMT/PositionVariation 0 mm
 /WCSim/PMT/TankRadiusChange 0 0 0 mm
-/WCSim/PMT/PositionFile mPMT-configfiles/mPMTconfig_Position_WCTE_RotateBarrelHalfTower.txt
+/WCSim/PMT/PositionFile data/mPMT_Position_WCTE.txt
 /WCSim/Construct
 
 /WCSim/PMTQEMethod Stacking_Only
 /WCSim/PMTCollEff on
 
-/DarkRate/SetDarkRate 0.1 kHz
-/DarkRate/SetConvert 1.367
+/DAQ/Digitizer SKI
+/DAQ/Trigger NDigits
+/control/execute macros/daq.mac
+/DarkRate/SetDarkMode 1
+/DarkRate/SetDarkHigh 100000
+/DarkRate/SetDarkLow 0
+/DarkRate/SetDarkWindow 4000
 
 /mygen/generator gun
 /gun/particle e-
