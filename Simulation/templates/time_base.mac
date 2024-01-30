@@ -7,7 +7,7 @@
 /WCSim/PMT/ReplicaPlacement false
 /WCSim/PMT/PositionVariation 0 mm
 /WCSim/PMT/TankRadiusChange 0 0 0 mm
-/WCSim/PMT/PositionFile data/mPMT_Position_WCTE.txt
+/WCSim/PMT/PositionFile mPMT_Position_WCTE.txt
 /WCSim/Construct
 
 /WCSim/PMTQEMethod Stacking_Only
@@ -15,7 +15,7 @@
 
 /DAQ/Digitizer SKI
 /DAQ/Trigger NDigits
-/control/execute macros/daq.mac
+/control/execute daq.mac
 /DarkRate/SetDarkMode 1
 /DarkRate/SetDarkHigh 100000
 /DarkRate/SetDarkLow 0

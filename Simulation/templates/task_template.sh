@@ -8,9 +8,8 @@ source ROOT_INSTALLDIR/bin/thisroot.sh
 
 source WCSIM_INSTALLDIR/setup.sh
 
-mkdir $SCRATCHDIR/mPMT-configfiles 
-#cp WCSIM_INSTALLDIR/mPMT-configfiles/mPMTconfig_Position_WCTE_RotateBarrelHalfTower.txt $SCRATCHDIR/mPMT-configfiles (doesn't exist with WCSim v1.12.6+)
-cp WCSIM_INSTALLDIR/mPMT-configfiles/mPMTconfig_19_nuPrism_3ring.txt $SCRATCHDIR/mPMT-configfiles # related to HyperK_HybridmPMT_IDonly_Realistic Geometry
+cp WCSIM_INSTALLDIR/mPMT-configfiles/mPMTconfig_19_nuPrism_3ring.txt $SCRATCHDIR # related to HyperK_HybridmPMT_IDonly_Realistic Geometry
+cp WCSIM_INSTALLDIR/data/mPMT_Position_WCTE.txt    $SCRATCHDIR
 cp WCSIM_INSTALLDIR/macros/daq.mac                 $SCRATCHDIR
 cp WCSIM_INSTALLDIR/macros/jobOptions.mac          $SCRATCHDIR
 cp WCSIM_INSTALLDIR/macros/tuning_parameters.mac   $SCRATCHDIR
