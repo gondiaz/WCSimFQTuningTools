@@ -1,0 +1,28 @@
+/run/verbose 0
+/tracking/verbose 0
+/hits/verbose 0
+
+/WCSim/WCgeom HyperK_HybridmPMT_IDonly_Realistic
+/WCSim/Geometry/RotateBarrelHalfTower true
+/WCSim/PMT/ReplicaPlacement false
+/WCSim/PMT/PositionVariation 0 mm
+/WCSim/PMT/TankRadiusChange 0 0 0 mm
+/WCSim/PMT/PositionFile mPMTconfig_19_nuPrism_3ring.txt
+/WCSim/Construct
+
+/WCSim/PMTQEMethod Stacking_Only
+/WCSim/PMTCollEff on
+
+/DAQ/Digitizer SKI
+/DAQ/Trigger NDigits
+/control/execute macros/daq.mac
+/DarkRate/SetDarkMode 1
+/DarkRate/SetDarkHigh 100000
+/DarkRate/SetDarkLow 0
+/DarkRate/SetDarkWindow 4000
+
+/mygen/generator gun
+/gun/particle e-
+/gun/energy 1 keV
+/gun/direction 1 0 0 
+/gun/position 0 0 0
