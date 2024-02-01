@@ -73,6 +73,7 @@ def main():
     
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument( "indir", type=str, nargs=1, help = "directory containing input files")
+    parser.add_argument( "-j", type=int, help="number of parallel processes")
     parser.add_argument( "--qbins", type=str, nargs=1, help = "qbins file", default="qbins_wcte.txt")
     parser.add_argument( "--wcsimlib",   type=str, nargs="?", help = "WCSim lib path", default="$HOME/Software/WCSim/install/lib")
     
@@ -94,6 +95,7 @@ def main():
 
     # get number of PMTs in the detector (used to compute the hit probability)
     nPMTs = get_nPMTs(infiles[0])
+    if args.verbose: print(f"Number of PMTs: {nPMTs}")
 
     # split input files in mu groups
     mus = np.unique([get_mu_and_index(f)[0] for f in infiles])
@@ -104,7 +106,7 @@ def main():
     qbins = np.loadtxt(args.qbins[0])
     # loop over mu and fill histograms for each one
     results = []
-    with concurrent.futures.ProcessPoolExecutor() as executor:
+    with concurrent.futures.ProcessPoolExecutor(max_workers=args.j) as executor:
         # parallelize
         future_to_mu = {executor.submit(process_mu, mu, files, qbins, nPMTs, args.verbose): mu for mu, files in zip(mus, groups)}
 
