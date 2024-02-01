@@ -17,12 +17,12 @@ module Parameters
        nevents_per_task  = 50
        nsubtasks         = 100
        ntasks_per_job    = 10
-       base_mac          = abspath("templates/cprofile_base.mac")
-       config_mac        = abspath("templates/cprofile_config.mac")
        # Cherenkov profile
+#        nevents_per_task  = 50
 #        base_mac          = abspath("templates/cprofile_base.mac")
 #        config_mac        = abspath("templates/cprofile_config.mac")
        # charge PDF
+       nevents_per_task  = 5
        base_mac          = abspath("templates/charge_base_hk.mac")
        config_mac        = abspath("templates/charge_config.mac")
        task_template     = abspath("templates/task_template.sh")
