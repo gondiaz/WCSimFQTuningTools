@@ -14,7 +14,7 @@ module Parameters
        prod_basedir = "$(ENV["LUSTRE"])/CProfiles/"
 
        verbose           = true
-       nevents_per_task  = 50
+#        nevents_per_task  = 5 -> specified in each tuning step
        nsubtasks         = 100
        ntasks_per_job    = 10
        # Cherenkov profile
@@ -22,22 +22,28 @@ module Parameters
 #        base_mac          = abspath("templates/cprofile_base.mac")
 #        config_mac        = abspath("templates/cprofile_config.mac")
        # charge PDF
-       nevents_per_task  = 5
-       base_mac          = abspath("templates/charge_base_hk.mac")
-       config_mac        = abspath("templates/charge_config.mac")
+#        nevents_per_task  = 5
+#        base_mac          = abspath("templates/charge_base_hk.mac")
+#        config_mac        = abspath("templates/charge_config.mac")
+       # Scattering tables
+       nevents_per_task  = 50
+       base_mac          = abspath("templates/stable_base_hk.mac")
+       config_mac        = abspath("templates/stable_config.mac")
+
        task_template     = abspath("templates/task_template.sh")
        job_template      = abspath("templates/job_template.sh")
 
        # For Cherenkov profiles
 #        config_variables  = Dict( "momentum" => range(50, 1000, step=10)
 #                                , "particle" => ["e-"])
-       # config_variables = Dict( "particle" => ["e-"])
+       # For scattering tables
+       config_variables = Dict( "particle" => ["e-"])
        # For Charge PDF
-       config_variables = Dict( "true_charge" => vcat( range(0.1, 1.9, step=0.1)
-                                                     , range(2.0, 4.5, step=0.5)
-                                                     , range(5.0, 9.0, step=1)
-                                                     , range(  10, 19, step=2)
-                                                     , range(  20, 50, step=5)))
+#        config_variables = Dict( "true_charge" => vcat( range(0.1, 1.9, step=0.1)
+#                                                      , range(2.0, 4.5, step=0.5)
+#                                                      , range(5.0, 9.0, step=1)
+#                                                      , range(  10, 19, step=2)
+#                                                      , range(  20, 50, step=5)))
        # config_variables = Dict("particle" => ["e-"], "energy" => range(100, 1000, step=100))
 
        queue_command  = pipeline(`squeue -ah`, `wc -l`)
