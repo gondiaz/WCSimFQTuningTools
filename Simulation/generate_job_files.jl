@@ -45,7 +45,7 @@ for taskfiles in Iterators.partition(task_files, ntasks_per_job)
            , "jobid"         => jobid
            , "TASKS"         => tasks)
     job_fname = joinpath(jobs_dir, "job_$jobid.sh")
-    if verbose println("Writting $job_fname") end
+    if verbose println("Writing $job_fname") end
     write(job_fname, job)
 end
 

@@ -12,8 +12,8 @@ The procedure involves the following steps:
 
 2) Perform the $q$ vs $f(q|\mu)$ fits.
 
-    Run it through: `python fit_charge_pdfs.py [-v] [--infile [INFILE]] [--wcsimlib [WCSIMLIB]] [--npars NPARS [NPARS ...]] [--qranges QRANGES [QRANGES ...]]`
+    Run it through: `python fit_charge_pdfs.py [-v] [--infile [INFILE]] [--npars NPARS [NPARS ...]] [--qranges QRANGES [QRANGES ...]]`
     
-    where `v` activates verbosity; `wcsimlib` is the directory of the WCSim library; `infile` point to the file produced at step 1 (default); `wcsimlib` is the directory of the WCSim library; `npars` is the number of parameters for each range of $q$; `qranges` defines the boundaries of the $q$ ranges.
+    where `v` activates verbosity; `infile` point to the file produced at step 1 (default); `npars` is the number of parameters for each range of $q$; `qranges` defines the boundaries of the $q$ ranges.
 
     The meaning of the last two parameters is the following: if `qranges` is `0 10 20` and `npars` is `5 6`, then the fits for $q$ values between `0` and `10` are `5` parametric and for $q$ values between `10` and `20` are `6` parametric.

@@ -1,0 +1,7 @@
+uproot
+jupyter
+matplotlib
+fsspec-xrootd
+xrootd
+scipy
+pandas # needed by scatteringTable

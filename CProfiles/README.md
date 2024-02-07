@@ -1,15 +1,16 @@
 ## Cherenkov Profiles
 
-Follow the steps to generate a the Cherenkov profiles tuning file:
+Follow the steps to generate the Cherenkov profiles tuning file:
 
 **Important comments**:
-- Before producing the Cherenkov Profiles, check the 2D histogram binning is reasonable in the WCSimFQTuner (_WCSimFQTunerCherenkovProfiles.cc_)
+- Before producing the Cherenkov Profiles, check the 2D histogram binning is reasonable in the WCSimFQTuner (_WCSimFQTunerCherenkovProfile.cc_).
+  This can be done by opening any of the produced WCSim files and look at the `trg` TH2D histogram; this can be done using the  
 - The tools assume that the distance units are `mm` in the simulation files, and transformed to `cm` in the step 1).
 - Make sure ROOT is setup (in order to be able to `import ROOT`) 
 
 **Step 1**: Run `merge_cprofiles_parallel.py` script: `python merge_cprofiles_parallel.py /path/to/input/files/ tr|wt [-v]`, where the input files must be named as **out_{particle}\_{momentum}_{integer}.root**. It outputs **cprofiles_merged.root** which merges the cherenkov profiles for all the simulated momenta. The second argument stands for **tr** (true) or **wt** (weighted) profiles.
 
-**Step 2** Run `integrate_cprofiles.py`: integrates the cherenkov profiles for each momenta to produce the $I_n = \int g(s, \cos\theta) s^n ~~ (n=0, 1, 2)$. Reads the **cprofiles_merged.root** (default) created at 2. Returns a **cprofiles_integrals.root** file.
+**Step 2** Run `integrate_cprofiles.py`: integrates the cherenkov profiles for each momentum to produce the $I_n = \int g(s, \cos\theta) s^n ~~ (n=0, 1, 2)$. Reads the **cprofiles_merged.root** (default) created at 2. Returns a **cprofiles_integrals.root** file.
 
 Run it using `python integrate_cprofiles.py r0max nr0bins nth0bins [-i merged_file.root] [-v]` where:
 - **r0max**: maximum $r_0$ distance in mm, ie distance between PMT and track vertex.
@@ -27,3 +28,7 @@ The output file format is the same as the required by fiTQun, but must be rename
 ### **Analysis**
 
 Contains jupyter-notebooks to check distributions for each production step and compare with previous implementation.
+
+### Check 2D histograms with WCSimFQTuner/WCSimFQTunerCherenkovProfile
+
+Todo: add instructions

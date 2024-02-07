@@ -34,7 +34,7 @@ for macrofile in macro_files
                   , "macrofile" => macrofile)
 
     task_fname = joinpath(tasks_dir, "task_$taskid.sh")
-    if verbose println("Writting $task_fname") end
+    if verbose println("Writing $task_fname") end
     write(task_fname, task)
     chmod(task_fname, 0o744)
 end

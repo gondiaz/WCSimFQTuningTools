@@ -1,6 +1,6 @@
 ## Angular response
 
-The angular response for a PMT is the photon collection efficiency as a funcion of the angle of incidence. 
+The angular response for a PMT is the photon collection efficiency as a function of the angle of incidence. 
 In fiTQun, the angular response factor is $\epsilon(\eta)$, and to compute it we follow the procedure:
 
 1) Compute the most general incidence factor $J(R, \eta) = \Omega(R) T(R) \epsilon(\eta)$ where R is the distance between the emission point and $\eta$ is the incidence angle. This factor is computed as an 2D histogram using the "electron bomb" simulation files also used in the computation of the scatterring table. The output is a `.root` file containing three 2D histograms, which must be the same in the absence of bias: using all the PMTs, using only side PMTs and using the caps PMTs. The histograms are normalized such that $J(R, 0) = 1$ (normal incidence). Thus the computed 2D histogram is $J(R, \eta) / J(R, 0) = \epsilon(\eta) / \epsilon(\eta=0)$
