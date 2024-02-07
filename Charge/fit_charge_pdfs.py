@@ -41,8 +41,8 @@ def main():
     
     parser.add_argument("-v", "--verbose", action="store_true")
     parser.add_argument(  "--infile",   type=str, nargs="?", help = "charge 2D file", default="charge2D_and_unhit.root")
-    parser.add_argument(   "--npars", type=int  , nargs="+", help = "number of parameters per range", default=[4, 6, 4])
-    parser.add_argument( "--qranges", type=float, nargs="+", help = "range limits for q", default=[0., 1.45, 29.5, 1000.])
+    parser.add_argument(  "npars", type=int  , nargs="+", help = "number of parameters per range")
+    parser.add_argument("qranges", type=float, nargs="+", help = "range limits for q")
     
     args = parser.parse_args()
     ##########################################

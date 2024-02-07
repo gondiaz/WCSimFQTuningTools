@@ -7,7 +7,7 @@ import numpy  as np
 
 from os.path   import expandvars, join, basename
 
-from STable_tools import split_tubeids, clockwise_azimuth_angle
+from STable.STable_tools import split_tubeids, clockwise_azimuth_angle
 
 
 def main():

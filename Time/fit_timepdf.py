@@ -36,8 +36,8 @@ def main():
     parser.add_argument(  "--infile",   type=str, nargs="?", help = "time 2D file", default="tres_trueq_2Dhistogram.root")
 
     parser.add_argument( "--min_entries", type=int, nargs="?", help = "min number of entries", default=100)
-    parser.add_argument( "--npars_gauss", type=int, nargs="?", help = "number of parameters", default=7)
-    parser.add_argument( "--npars_pars" , type=int, nargs="?", help = "number of parameters", default=7)
+    parser.add_argument("npars_gauss", type=int, nargs="+", help = "number of parameters")
+    parser.add_argument("npars_pars" , type=int, nargs="+", help = "number of parameters")
     
     args = parser.parse_args()
     ##########################################

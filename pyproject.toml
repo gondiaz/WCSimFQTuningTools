@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "WCSimFQTuningTools"
+version = "0.0.1"
+authors = [
+    {name = "Gonzalo Díaz López", email = "gdiazlop@lpnhe.in2p3.fr"},
+]
+dependencies = [
+    "numpy",
+    "tables",
+    "pandas",
+    "uproot",
+    "scipy",
+    "wcsim-hdf5"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+
+[project.scripts]
+compute_angular_responses = "Angular.compute_angular_responses:main"
+fit_angular_responses     = "Angular.fit_angular_responses:main"
+
+create_2Dhistos_and_unhitP = "Charge.create_2Dhistos_and_unhitP_parallel:main"
+fit_charge_pdfs            = "Charge.fit_charge_pdfs:main"
+
+merge_cprofiles        = "CProfiles.merge_cprofiles_parallel:main"
+integrate_cprofiles    = "CProfiles.integrate_cprofiles:main"
+fit_cprofile_integrals = "CProfiles.fit_cprofile_integrals:main"
+
+compute_STable     = "STable.compute_STable:main"
+compute_STable_hdf = "STable.compute_STable_hdf:main"
+
+fit_timepdf = "Time.fit_timepdf:main"
+
