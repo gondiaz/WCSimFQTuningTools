@@ -1,4 +1,4 @@
-## **Simulations**
+# **Simulations**
 
 This directory contains scripts to generate and run the simulations.The simulations use **WCSimFQTuner**, which requires a macro of configuration parameters. This utility creates the *macros* and *tasks* for each desired configuration and the *jobs* to be run.
 
@@ -32,3 +32,16 @@ For your own geometry (HK, SK, other), you might need to define your own macros 
 To run the simulations interactively, see **Simulations/local**.
 
 **TODO**: add documentation about the different simulations required for the tuning files
+
+## WCTE configuration
+
+## HK configuration
+
+### Cherenkov profiles
+
+### Charge PDF
+
+### Scattering tables
+
+
+
