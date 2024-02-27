@@ -1,3 +1,9 @@
+# MacOS
+*DS_Store
+
+# python project
+*egg-info
+
 # hdf files
 *.h5
 

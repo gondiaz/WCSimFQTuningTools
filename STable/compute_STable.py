@@ -7,13 +7,13 @@ import numpy  as np
 
 from os.path   import expandvars, join, basename
 
-from STable_tools import split_tubeids, clockwise_azimuth_angle
+from STable.STable_tools import split_tubeids, clockwise_azimuth_angle
 
 
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "compute STable"
+    parser = argparse.ArgumentParser( prog        = "compute_STable"
                                     , description = "description"
                                     , epilog      = """ The table variables are the following:
                                                     zs: source z position
@@ -25,24 +25,23 @@ def main():
                                                     theta: source direction angle w.r.t PMT""")
     
     parser.add_argument("-v", "--verbose", action="store_true")
-
-    parser.add_argument(      "indir",   type=str,   nargs=1, help = "directory containing produced files")
-    parser.add_argument(    "--nbins",   type=int,   nargs=7, help = "histogram bins in the following order: zs,Rs,R_PMT,z_PMT,phi,zd,theta", default=[35, 16, 8, 16, 16, 16, 16])
-    parser.add_argument(    "--vaxis",   type=int, nargs="?", help = "detector vertical axis (0)", default=2)    
-    parser.add_argument(    "--zedge", type=float, nargs="?", help = "histogram edge for vertical (z) dimensions in cm", default=136.95-20.) # default wcte
-    parser.add_argument(    "--redge", type=float, nargs="?", help = "histogram edge for radial (r) dimensions in cm"  , default=172.05-20.) # default wcte
-    parser.add_argument( "--wcsimlib",   type=str, nargs="?", help = "WCSim lib path"         , default="$HOME/Software/WCSim/install/lib")
-    parser.add_argument( "--fitqunlib",   type=str, nargs="?", help = "fiTQun lib path", default="$HOME/Software/fiTQun/install/lib")
+    parser.add_argument("indir", type=str, nargs=1, help = "directory containing produced files")
+    parser.add_argument( "--wcsimlib", type=str, nargs=1, help="WCSim lib path")
+    parser.add_argument("--fitqunlib", type=str, nargs=1, help="fiTQun lib path")
+    parser.add_argument("--vaxis", type=int, nargs="?", help = "detector vertical axis (0)", default=2)
+    parser.add_argument("--nbins", type=int, nargs=7, help = "histogram bins in the following order: zs,Rs,R_PMT,z_PMT,phi,zd,theta")
+    parser.add_argument("--zedge", type=float, nargs=1, help = "histogram edge for vertical (z) dimensions in cm")
+    parser.add_argument("--redge", type=float, nargs=1, help = "histogram edge for radial (r) dimensions in cm")
     
     args = parser.parse_args()
     ##########################################
 
     # Load WCSimRoot.so
-    ROOT.gSystem.AddDynamicPath(expandvars(args.wcsimlib))
+    ROOT.gSystem.AddDynamicPath(expandvars(args.wcsimlib[0]))
     ROOT.gSystem.Load          ("libWCSimRoot.dylib" if sys.platform == "darwin" else "libWCSimRoot.so")
 
     # Load libfiTQunLib.so to access TScatTable class
-    ROOT.gSystem.AddDynamicPath(expandvars(args.fitqunlib))
+    ROOT.gSystem.AddDynamicPath(expandvars(args.fitqunlib[0]))
     ROOT.gSystem.Load          ("libfiTQunLib.dylib" if sys.platform == "darwin" else "libfiTQunLib.so")
 
     # get simulation filenames, removing those ending in '_flat.root'
@@ -61,13 +60,6 @@ def main():
     # get bottom, top and side tube-ids from the first file
     tubeid_bottom, tubeid_top, tubeid_side = split_tubeids(infiles[0], vaxis=vaxis)
 
-    # this lines are commented because these parameter definitions ere misleading in WCSim
-    # # Define TScatTable 6D histogram
-    # df, _     = read_wcsim_geometry(infiles[0])
-    # tube_ztop = df.loc["WCCylLength", "WC"]/2.  # detector cylinder half-length
-    # tube_rad  = df.loc["WCPMTRadius", "WC"]     # PMT module radius
-    # cyl_rad   = df.loc["WCCylRadius", "WC"]     # detector cylinder radius
-
     # Define scatering table binning
     # 6 variables
     # zs: source z position
@@ -85,8 +77,8 @@ def main():
     nzd    = args.nbins[5]
     ntheta = args.nbins[6]
 
-    zedge = args.zedge
-    redge = args.redge
+    zedge = args.zedge[0]
+    redge = args.redge[0]
 
     zs    = [-zedge, zedge]
     Rs    = [0., redge]
@@ -126,21 +118,23 @@ def main():
         if args.verbose: print(f"Processing file {n}/{len(infiles)}...", basename(filename))
         # read data
         with uproot.open(filename) as f:
-            # contains the following data if the optical photon reaches a PMT
-            # either directly or indirectly
-            # parent pos and dir
-            srcpos = f["sttree/srcpos"].array().to_numpy()
-            srcdir = f["sttree/srcdir"].array().to_numpy()
-            # photon pos and dir
-            #oppos  = f["sttree/oppos"] .array().to_numpy()
-            #opdir  = f["sttree/opdir"] .array().to_numpy()
-            # PMT number/pos
-            ihPMT   = f["sttree/ihPMT"]  .array().to_numpy()
-            tubepos = f["sttree/tubepos"].array().to_numpy()
-            # distance covered? (not needed)
-            deltaL = f["sttree/deltaL"].array().to_numpy()
-            # ISTORY=(# of refl)*1000 + (# of scat); 0 if direct hit
-            isct = f["sttree/isct"].array().to_numpy()
+            try:
+                # contains the following data if the optical photon reaches a PMT
+                # either directly or indirectly
+                # parent pos and dir
+                srcpos = f["sttree/srcpos"].array().to_numpy()
+                srcdir = f["sttree/srcdir"].array().to_numpy()
+                # photon pos and dir
+                #oppos  = f["sttree/oppos"] .array().to_numpy()
+                #opdir  = f["sttree/opdir"] .array().to_numpy()
+                # PMT number/pos
+                ihPMT   = f["sttree/ihPMT"]  .array().to_numpy()
+                tubepos = f["sttree/tubepos"].array().to_numpy()
+                # distance covered? (not needed)
+                deltaL = f["sttree/deltaL"].array().to_numpy()
+                # ISTORY=(# of refl)*1000 + (# of scat); 0 if direct hit
+                isct = f["sttree/isct"].array().to_numpy()
+            except uproot.exceptions.KeyInFileError: continue
 
 
         # Rotate with vertical direction given by vaxis

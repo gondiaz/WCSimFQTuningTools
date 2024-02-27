@@ -8,8 +8,7 @@ import numpy  as np
 
 from os.path   import expandvars, join, basename
 
-sys.path.append("../STable/")
-from STable_tools import read_wcsim_geometry
+from STable.STable_tools import read_wcsim_geometry
 
 
 def main():

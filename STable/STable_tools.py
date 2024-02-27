@@ -1,9 +1,40 @@
 import ROOT
+import uproot
 import itertools
 import numpy  as np
 import pandas as pd
 
 from os.path import expandvars
+
+from numba import jit, vectorize, float64
+
+@vectorize([float64(float64, float64)])
+def azimuth_angle(x, y):
+    """
+    Computes the azimuth angle [0, 2pi) for a vector of components x, y
+    """
+    mod = np.sqrt(x**2 + y**2)
+    if (mod == 0.): return 0.
+    phi = np.arccos(x/mod)
+    if (y != 0): phi  = np.sign(y)*phi
+    if (phi< 0): phi += 2.*np.pi
+    return phi
+
+@jit(cache=True)
+def clockwise_azimuth_angle(v1, v2):
+    """Returns clockwise angle between the two vectors
+    TODO: improve description"""
+    angles = np.zeros(len(v1))
+    a1 = azimuth_angle(v1[:, 0], v1[:, 1])
+    a2 = azimuth_angle(v2[:, 0], v2[:, 1])
+    
+    da = a2 - a1
+    sel = da>0
+    angles[sel] = 2.*np.pi - da[sel]
+    sel = da<0
+    angles[sel] = -da[sel]
+    return angles
+
 
 def read_wcsim_geometry(filename):
 
@@ -15,7 +46,8 @@ def read_wcsim_geometry(filename):
 
     Requires WCSimRoot library loaded
     """
-    rootf = ROOT.TFile(expandvars(filename), "read")
+    filename = expandvars(filename)
+    rootf = ROOT.TFile(filename, "read")
 
     tree  = rootf.GetKey("wcsimGeoT").ReadObj()
     tree.GetEvent(0)
@@ -30,6 +62,10 @@ def read_wcsim_geometry(filename):
     df.loc["WCNumPMT"]    = geom.GetWCNumPMT   ()
     df.loc["WCPMTRadius"] = geom.GetWCPMTRadius()
     for i in range(3): df.loc[f"WCOffset{i}"] = geom.GetWCOffset(i)
+
+    with uproot.open(filename) as f:
+        for key in ["WCDetRadius", "WCDetHeight"]:
+            df.loc[key] = 0.1*f[f"Settings/{key}"].array()[0]
 
     # mPMT info
     columns = ["TubeNo", "mPMTNo", "mPMT_PMTNo", "CylLoc"]
@@ -78,37 +114,6 @@ def split_tubeids(filename, vaxis=2):
     assert len(tubeid_side) + len(tubeid_bottom) + len(tubeid_top) == len(pmts_df)
 
     return tubeid_bottom, tubeid_top, tubeid_side
-
-
-def azimuth_angle(v):
-    """
-    Computes the azimuth angle [0, 2pi) in radians for the 3D vector **v**
-    Assumes that first and second entries are the X and Y projections
-    **v** can be an array of vectors, ie an array of shape (# of vectors, vector dimension)
-    """
-    # between [-pi, pi]
-    m   = np.linalg.norm(v[:, (0, 1)], axis=1)
-    with np.errstate(divide="ignore", invalid="ignore"): px = v[:, 0] / m
-    phi = np.arccos(px)
-    sel = (v[:, 1] != 0)
-    phi[sel] = np.sign(v[sel, 1]) * phi[sel]
-    # transform to [0, 2pi)
-    phi[phi<0] += 2.*np.pi
-    return np.nan_to_num(phi, nan=0.)
-
-
-def clockwise_azimuth_angle(v1, v2):
-    """Returns clockwise angle between the two vectors"""
-    angles = np.zeros(len(v1))
-    a1 = azimuth_angle(v1)
-    a2 = azimuth_angle(v2)
-    
-    da = a2 - a1
-    sel = da>0
-    angles[ sel] = 2.*np.pi - da[sel]
-    sel = da<0
-    angles[sel] = -da[sel]
-    return angles
 
 
 def read_stable(filename, names=["botscattable", "topscattable", "sidescattable"]):
