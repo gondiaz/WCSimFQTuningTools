@@ -53,7 +53,7 @@ def process_momentum(pid, momentum, files, htype, lock, verbose=False):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "merge_cprofiles"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = "Text at the bottom of help")
 
@@ -79,7 +79,7 @@ def main():
         raise Exception(f"Unknown parameter: {args.pid}, should be e-, e+, mu-, mu+, pi-, pi+")
 
     # check if type is tr or wt
-    if args.type[0] not in ["tr", "wt"]: 
+    if args.type[0] not in ["tr", "wt"]:
         raise Exception("Type must be one of tr or wt")
 
     # sorter function

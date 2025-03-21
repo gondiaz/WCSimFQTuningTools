@@ -86,7 +86,7 @@ def compute_goodness_of_fit(xs, ys, parss):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "integrate_cprofiles"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = "Text at the bottom of help")
     
@@ -187,11 +187,11 @@ def main():
 
                 # TODO: compute chi2
                 th2d_chi2.SetBinContent(r0bin+1, th0bin+1, 1)
-        
+
         fout.WriteObject(      th3d, f"hI3d_par_{n}")
         fout.WriteObject( th2d_chi2, f"hI3d_par_{n}_chi2")
         fout.WriteObject(th2d_nsect, f"hI3d_nsect_{n}")
-    
+
     # Add hprofinf
     hprofinf = ROOT.TH1F("hprofinf", "hprofinf", 6, np.arange(-0.5, 6.5, 0.5))
     hprofinf.SetBinContent(1, npars)
