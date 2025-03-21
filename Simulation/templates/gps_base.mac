@@ -23,11 +23,12 @@
 /DarkRate/SetDarkHigh 100000
 /DarkRate/SetDarkLow 0
 /DarkRate/SetDarkWindow 20
+/DarkRate/SetDarkRate 0 kHz
 
 /particle/select mu-
 /particle/process/inactivate 7 # inactivate Decay process
 /particle/process/inactivate 8 # inactivate muMinusCaptureAtRest
-/Tracking/saveHitProducingTracks true
+/Tracking/saveHitProducingTracks false
 
 /WCSimIO/SaveRooTracker 0
 

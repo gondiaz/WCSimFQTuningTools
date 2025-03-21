@@ -23,7 +23,7 @@
 /DarkRate/SetDarkHigh 100000
 /DarkRate/SetDarkLow 0
 /DarkRate/SetDarkWindow 20
-#/DarkRate/SetDarkRate 0 kHz 
+/DarkRate/SetDarkRate 0 kHz 
 
 /Tracking/saveHitProducingTracks true
 

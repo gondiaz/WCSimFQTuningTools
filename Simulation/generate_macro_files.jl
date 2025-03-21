@@ -1,6 +1,11 @@
 include("config.jl")
 using .Parameters
 
+# function that replaces fullpaths by basenames in dictionary
+function full_to_base(dict::Dict)
+    return Dict(k => (v isa String && ispath(v) ? basename(v) : v) for (k, v) in dict)
+end
+
 # create macro and out directories
 macro_dir = joinpath(abspath(prod_basedir), "macros")
 out_dir   = joinpath(abspath(prod_basedir), "out")
@@ -36,10 +41,11 @@ for vals in Iterators.product(values(config_variables)...)
 
     # subtask for each set of values
     for subtask in range(1, nsubtasks)
+        
         # add values to dic
         d["rseed"]          = rseed
         d["subtask"]        = subtask
-        d["out_root_fname"] = replace(replace(out_fname, collect(d)...), " " => "_")
+        d["out_root_fname"] = replace(replace(out_fname, collect(full_to_base(d))...), " " => "_")
 
         # add macvars to dictionary
         for var in setdiff(macvars, collect(keys(d)), ["out_root_fname"])
@@ -48,7 +54,9 @@ for vals in Iterators.product(values(config_variables)...)
         
         # replace variable values into macro and write it
         mac = replace(mactemplate, [Pair("\$" * k, v) for (k,v) in d]...)
-        write(replace(replace(macro_fname, collect(d)...), " " => "_"), mac)
+
+        # write macro file
+        write(replace(replace(macro_fname, collect(full_to_base(d))...), " " => "_"), mac)
 
         global rseed += 1
     end
