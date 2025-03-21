@@ -5,6 +5,8 @@ import ROOT
 import numpy  as np
 import matplotlib.pyplot as plt
 
+from os.path import basename
+
 from scipy.optimize import curve_fit
 
 
@@ -15,7 +17,7 @@ def polynomial(x, *coefficients):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "fit angular response"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = """""")
     
@@ -39,11 +41,11 @@ def main():
         il = np.digitize(lims[0], rbins)
         iu = np.digitize(lims[1], rbins)-1
         e = np.mean(h[il:iu, :], axis=0)
-    
+
     # compute bin centers and fit angular response
     etas = (etabins[1:] + etabins[:-1])/2.
     pars, _ = curve_fit(polynomial, etas, e, p0=np.ones(polydeg + 1)/2., bounds=(0, np.ones(polydeg + 1)))
-    
+
     # create polynomial TF1 and set the computed parameters
     tf1 = ROOT.TF1("angResp", f"pol{polydeg}", etabins[0], etabins[-1])
     tf1.SetParameters(*np.flip(pars))
@@ -64,7 +66,7 @@ def main():
     fout = ROOT.TFile("fitted_angular.root", "RECREATE")
     fout.WriteObject(tf1, "angResp")
     fout.Close()
-    
+
     return
 
 

@@ -14,7 +14,7 @@ from STable.STable_tools import read_wcsim_geometry
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "compute Angular responses"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = """""")
     
@@ -52,9 +52,9 @@ def main():
     # read PMT information (ids, positions, orientations)
     _, pmts_df = read_wcsim_geometry(infiles[0])
     pmts_df = pmts_df.set_index("TubeNo")
-    
-    # get ids of the tubes normal to the vessel (assumed to be the central PMTs)
-    inormal = pmts_df[pmts_df.mPMT_PMTNo == 1].index.values.astype(int)
+
+    # # get ids of the tubes normal to the vessel (assumed to be the central PMTs)
+    # inormal = pmts_df[pmts_df.mPMT_PMTNo == 1].index.values.astype(int)
 
     # these lines are commented because these parameter definitions ere misleading in WCSim
     # tube_ztop = df.loc["WCCylLength", "WC"]/2.  # detector cylinder half-length
@@ -66,14 +66,15 @@ def main():
     detRad    = args.redge
     rbins     = np.linspace(0, min(detRad, detLength/2.), args.nbins[0]+1)
     etabins   = np.linspace(0,                         1, args.nbins[1]+1)
-    
+
     # empty histograms to be filled
     Hside = np.zeros((len(rbins)-1, len(etabins)-1))
     Hcaps = np.zeros((len(rbins)-1, len(etabins)-1))
     Hall  = np.zeros((len(rbins)-1, len(etabins)-1))
     # Loop over simulation files and fill the histograms
     for n, filename in enumerate(infiles, 1):
-        if args.verbose: print(f"Processing file {n}/{len(infiles)}...", basename(filename))
+        if args.verbose: 
+            print(f"Processing file {n}/{len(infiles)}...", basename(filename))
         # read data
         with uproot.open(filename) as f:
             # contains the following data if the optical photon reaches a PMT
@@ -122,7 +123,8 @@ def main():
         eta  = np.array([np.dot(v1, v2) for (v1, v2) in zip(r, tubedir)])/modr
 
         # rotate tube positions to perform fiducial selections based on vertical and radial directions below
-        if vaxis != 2: tubepos = np.matmul(R, tubepos.T).T
+        if vaxis != 2:
+            tubepos = np.matmul(R, tubepos.T).T
 
         # select photons in valid shells
         rlim = rbins[np.digitize(modr, rbins)]
@@ -147,7 +149,8 @@ def main():
     Hall  = Hall /Hall [:, -1][:, np.newaxis]
 
     # save photon tables
-    if args.verbose: print("Writting histograms...")
+    if args.verbose:
+        print("Writting histograms...")
     
     # define root 2D histograms
     th2d_side = ROOT.TH2D("AngularResponse_side", "AngularResponse_side", len(rbins)-1, rbins, len(etabins)-1, etabins)
@@ -166,7 +169,7 @@ def main():
     fout.WriteObject(th2d_caps, "AngularResponse_caps")
     fout.WriteObject(th2d_all , "AngularResponse_all")
     fout.Close()
-    
+
     return
 
 
