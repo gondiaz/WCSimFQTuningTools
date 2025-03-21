@@ -1,0 +1,8 @@
+/control/execute   $base_mac
+/WCSim/random/seed $rseed
+
+/mygen/vecfile $vectorfile
+
+/WCSimIO/RootFile $out_root_fname
+/run/beamOn       $nevents_per_task
+

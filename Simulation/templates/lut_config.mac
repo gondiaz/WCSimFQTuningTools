@@ -1,0 +1,9 @@
+/control/execute   $base_mac
+/WCSim/random/seed $rseed
+
+/gps/particle  $particle
+/gps/energy    $energy MeV
+
+/WCSimIO/RootFile  $out_root_fname
+/run/beamOn        $nevents_per_task
+

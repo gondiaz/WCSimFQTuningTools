@@ -1,0 +1,39 @@
+/run/verbose 1
+/tracking/verbose 0
+/hits/verbose 0
+/grdm/verbose 0
+
+/WCSim/SetPMTPercentCoverage  20.2150576375662
+/WCSim/SetPMTPercentCoverage2 0.
+/WCSim/WCgeom HyperK_HybridmPMT_WithOD_Realistic
+/WCSim/Construct
+
+/WCSim/PMTQEMethod     SensitiveDetector_Only
+/WCSim/PMTCollEff on
+
+/WCSim/SavePi0 false
+
+/DAQ/Digitizer SKI
+/DAQ/Trigger NDigits
+/control/execute daq.mac
+
+/DarkRate/SetDetectorElement tank
+/DarkRate/SetDarkRate 4.2 kHz #This is the value for SKI set in SKDETSIM.
+/DarkRate/SetDetectorElement tank
+/DarkRate/SetDarkMode 1
+/DarkRate/SetDarkWindow 4000
+/DarkRate/SetDetectorElement OD
+/DarkRate/SetDarkRate 0 kHz
+/DarkRate/SetDetectorElement tankPMT2
+/DarkRate/SetDarkRate 0 kHz
+
+/Tracking/fractionOpticalPhotonsToDraw 0.0
+
+/particle/select mu-
+/particle/process/inactivate 7 # inactivate Decay process
+/particle/process/inactivate 8 # inactivate muMinusCaptureAtRest
+#/Tracking/saveHitProducingTracks true
+
+/grdm/nucleusLimits 214 214 83 83
+
+/mygen/generator muline

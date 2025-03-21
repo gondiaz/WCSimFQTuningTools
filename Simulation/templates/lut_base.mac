@@ -1,0 +1,48 @@
+/run/verbose 0
+/tracking/verbose 0
+/hits/verbose 0
+
+/WCSim/WCgeom nuPRISMBeamTest_16cShort_mPMT
+/WCSim/Geometry/RotateBarrelHalfTower true
+/WCSim/PMT/ReplicaPlacement false
+/WCSim/PMT/PositionVariation 0 mm
+/WCSim/PMT/TankRadiusChange 0 0 0 mm
+/WCSim/PMT/PositionFile data/mPMT_Position_WCTE.txt
+/WCSim/Construct
+
+/WCSim/PMTQEMethod     SensitiveDetector_Only
+#/WCSim/PMTQEMethod    DoNotApplyQE
+/WCSim/PMTCollEff on
+
+/DAQ/Digitizer SKI
+/DAQ/Trigger NDigits
+/control/execute daq.mac
+
+/DarkRate/SetDetectorElement tank
+/DarkRate/SetDarkMode 1
+/DarkRate/SetDarkHigh 100000
+/DarkRate/SetDarkLow 0
+/DarkRate/SetDarkWindow 20
+/DarkRate/SetDarkRate 0 kHz
+
+/particle/select mu-
+/particle/process/inactivate 7 # inactivate Decay process
+/particle/process/inactivate 8 # inactivate muMinusCaptureAtRest
+/Tracking/saveHitProducingTracks true
+
+/WCSimIO/SaveRooTracker 0
+
+/fqTune/mode killScatterRef
+
+/mygen/generator gps
+/gps/ene/type  Mono
+
+/gps/pos/type   Volume
+/gps/pos/shape  Cylinder
+/gps/pos/centre 0. 0. 0. cm
+/gps/pos/rot1   1 0 0
+/gps/pos/rot2   0 0 1
+/gps/pos/radius 150. cm
+/gps/pos/halfz  130. cm
+
+/gps/ang/type  iso
