@@ -1,4 +1,3 @@
-import os
 import re
 import argparse
 import warnings
@@ -7,6 +6,8 @@ import ROOT
 import numpy  as np
 import tables as tb
 from scipy.optimize import curve_fit
+
+from os.path import basename
 
 warnings.filterwarnings("ignore", category=tb.NaturalNameWarning)
 
@@ -28,7 +29,7 @@ def indirect_timepdf(t, delta, sig, gamma):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = ""
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = ""
                                     , epilog      = """""")
     

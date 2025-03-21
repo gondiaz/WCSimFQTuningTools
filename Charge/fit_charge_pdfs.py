@@ -105,7 +105,8 @@ def main():
         for pi, qindex in enumerate(selqbins, 0): # pi stands for point-index
             # get the qvalue, define and fill thresholds
             q = qs[qindex]
-            if args.verbose: print(f"Processing bin {globalpi}, q = {q}")
+            if args.verbose:
+                print(f"Processing bin {globalpi}, q = {q}")
             # get pdf values for this q
             pdf = Hq[:, qindex]
             # remove zeros (to avoid inf when doing the log)
@@ -116,8 +117,10 @@ def main():
             logpdf = np.log(pdf)
 
             # save graph for logpdf vs mu to output file
-            if len(mus_) != 0: glogpdf = ROOT.TGraph(len(mus_), mus_, logpdf)
-            else:              glogpdf = ROOT.TGraph()            
+            if len(mus_) != 0:
+                glogpdf = ROOT.TGraph(len(mus_), mus_, logpdf)
+            else:
+                glogpdf = ROOT.TGraph()
             fout.WriteObject(glogpdf, f"glogPDF_Rang{rang}_{globalpi}")
 
             # define mu thresholds
@@ -128,24 +131,30 @@ def main():
 
             # Fit
             fitfunc = get_fitting_function(mulow, muup)
-            if len(mus_) > 0: pars, _ = curve_fit(fitfunc, mus_, logpdf, p0=np.zeros(npar), method="trf")
-            else            : pars = np.zeros(npar)
+            if len(mus_) > 0:
+                pars, _ = curve_fit(fitfunc, mus_, logpdf, p0=np.zeros(npar), method="trf")
+            else:
+                pars = np.zeros(npar)
 
             # save fitted parameters
-            for par, gPar in zip(pars, gParams): gPar.SetPoint(pi, q, par)
+            for par, gPar in zip(pars, gParams):
+                gPar.SetPoint(pi, q, par)
             globalpi += 1
 
         # save to output file
-        for  pari, gPar   in enumerate(gParams): fout.WriteObject(  gPar, f"gParam_Rang{rang}_{pari}")
-        for bound, gmuthr in enumerate(gmuthrs): fout.WriteObject(gmuthr, f"gmuthr_Rang{rang}_{bound}")
+        for  pari, gPar in enumerate(gParams):
+            fout.WriteObject(  gPar, f"gParam_Rang{rang}_{pari}")
+        for bound, gmuthr in enumerate(gmuthrs):
+            fout.WriteObject(gmuthr, f"gmuthr_Rang{rang}_{bound}")
 
     # due to a bug in fiTQun, also save Rang = nqrange with empty values
     gParams = [ROOT.TGraph() for par in range(npars[rang])]
-    gmuthrs = [ROOT.TGraph() for i in range(2)]
+    gmuthrs = [ROOT.TGraph() for i   in range(2)]
     rang = nqranges
-    for  pari, gPar   in enumerate(gParams): fout.WriteObject(  gPar, f"gParam_Rang{rang}_{pari}")
-    for bound, gmuthr in enumerate(gmuthrs): fout.WriteObject(gmuthr, f"gmuthr_Rang{rang}_{bound}")
-
+    for  pari, gPar   in enumerate(gParams):
+        fout.WriteObject(  gPar, f"gParam_Rang{rang}_{pari}")
+    for bound, gmuthr in enumerate(gmuthrs):
+        fout.WriteObject(gmuthr, f"gmuthr_Rang{rang}_{bound}")
 
     # copy PUnhit to output file (copying a TGraph is not implemented in uproot)
     fin = ROOT.TFile(infilename)
@@ -158,7 +167,7 @@ def main():
         fout["charge2D"]   = fin["charge2D"]
         fout["hPunhitPar"] = fin["hPunhitPar"]
 
-    return 
+    return
 
 
 if __name__ == "__main__":

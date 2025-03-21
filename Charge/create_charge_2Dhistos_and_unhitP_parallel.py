@@ -49,7 +49,7 @@ def get_nPMTs(filename):
 
 def process_mu(mu, files, qbins, nPMTs, verbose=False):
     """Get q distribution and hit prob. for list of files (which are supposed to have same mu value)"""
-    if verbose: 
+    if verbose:
         print(f"--> Processing mu = {mu}".ljust(50))
 
     Qs = []
@@ -63,7 +63,7 @@ def process_mu(mu, files, qbins, nPMTs, verbose=False):
     Phit = np.mean(nHits) / nPMTs
     hq, _ = np.histogram(Qs, bins=qbins, density=True)
 
-    if verbose: 
+    if verbose:
         print(f"<-- Done for mu = {mu}".ljust(50))
     return mu, Phit, hq
 
@@ -71,7 +71,7 @@ def process_mu(mu, files, qbins, nPMTs, verbose=False):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "create 2D histos and unhitP"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "Compute 2D histogram (predicted vs measured charge) and predicted Q vs unhitP"
                                     , epilog      = """""")
 

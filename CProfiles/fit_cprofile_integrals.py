@@ -1,9 +1,9 @@
 import argparse
 import uproot
 import ROOT
-import numpy  as np
+import numpy as np
 
-from scipy.optimize import curve_fit, Bounds
+from os.path import basename
 
 
 def histogram2d_to_func(hist, xbins, ybins):
