@@ -3,9 +3,9 @@ import glob
 import argparse
 import uproot
 import ROOT
-import numpy  as np
+import numpy as np
 
-from os.path   import expandvars, join, basename
+from os.path import expandvars, join, basename
 
 from STable.STable_tools import split_tubeids, clockwise_azimuth_angle
 
@@ -13,7 +13,7 @@ from STable.STable_tools import split_tubeids, clockwise_azimuth_angle
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "compute_STable"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = """ The table variables are the following:
                                                     zs: source z position
@@ -207,7 +207,7 @@ def main():
     fout.WriteObject(Ttop_indirect   , "topscattable")
     fout.WriteObject(Tside_indirect  , "sidescattable")
     fout.Close()
-    
+
     return
 
 

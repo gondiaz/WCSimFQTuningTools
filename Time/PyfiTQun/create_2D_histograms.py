@@ -193,7 +193,7 @@ def process_momentum( filenames, outfilename
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "create_2D_histogram"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = """ """)
     

@@ -2,17 +2,16 @@ import re
 import sys
 import glob
 import argparse
-import ROOT
 import warnings
+import concurrent.futures
+
+from os.path   import expandvars, basename, join
+from itertools import groupby
+
+import ROOT
 import tables as tb
 import pandas as pd
 import numpy  as np
-
-import concurrent.futures
-
-from os.path import expandvars, basename, join
-from itertools import groupby
-
 
 def get_total_charge(filename):
     rootf = ROOT.TFile(filename, "read")

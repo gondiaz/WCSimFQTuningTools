@@ -38,12 +38,12 @@ def main():
     parser = argparse.ArgumentParser( prog        = "fit_charge_pdfs"
                                     , description = ""
                                     , epilog      = """""")
-    
+
     parser.add_argument("-v", "--verbose", action="store_true")
-    parser.add_argument(  "--infile",   type=str, nargs="?", help = "charge 2D file", default="charge2D_and_unhit.root")
+    parser.add_argument(  "--infile", type=str, nargs="?", help = "charge 2D file", default="charge2D_and_unhit.root")
     parser.add_argument(  "--npars", type=int  , nargs="+", help = "number of parameters per range")
     parser.add_argument("--qranges", type=float, nargs="+", help = "range limits for q")
-    
+
     args = parser.parse_args()
     ##########################################
 
@@ -59,15 +59,17 @@ def main():
         print("-------------------------")
         print(f"Using {len(npars)} q-ranges")
         print("-------------------------")
-        for i, n in enumerate(npars): print(f"Range {i} between [{qranges[i]}, {qranges[i+1]}] with {n} parameters")
+        for i, n in enumerate(npars):
+            print(f"Range {i} between [{qranges[i]}, {qranges[i+1]}] with {n} parameters")
 
     # in what follows, "mu" stands for predicted and "q" for measured charge
 
     # read 2D histogram
-    with uproot.open(infilename) as file: Hq, mubins, qbins = file["charge2D"].to_numpy()
+    with uproot.open(infilename) as file:
+        Hq, mubins, qbins = file["charge2D"].to_numpy()
 
     # compute bin centers
-    mus = (mubins[1:] + mubins[:-1])/2. 
+    mus = (mubins[1:] + mubins[:-1])/2.
     qs  = ( qbins[1:] +  qbins[:-1])/2.
 
     # output file
@@ -76,7 +78,8 @@ def main():
 
     # define q fit ranges and save to output
     hCPDFrange = ROOT.TH1D("hCPDFrange", "", nqranges, np.array(qranges))
-    for i, n in enumerate(npars, 1): hCPDFrange.SetBinContent(i, n)
+    for i, n in enumerate(npars, 1):
+        hCPDFrange.SetBinContent(i, n)
     fout.WriteObject(hCPDFrange, "hCPDFrange")
 
     # loop in q ranges
@@ -87,12 +90,12 @@ def main():
         if args.verbose:
             print()
             print(f"Processing range {rang}")
-            print(f"-----------------------")
+            print("-----------------------")
 
         # select qs in range
         qmin, qmax = qranges[rang], qranges[rang+1]
         selqbins = np.argwhere((qmin <= qs) & (qs < qmax)).flatten()
-        
+
         # graphs to fill for this range
         npar = npars[rang]
         gParams = [ROOT.TGraph() for par in range(npar)] # one graph per parameter

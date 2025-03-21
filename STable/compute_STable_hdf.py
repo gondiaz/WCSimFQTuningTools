@@ -80,7 +80,7 @@ def process_table(infiles, tabname, bins, tubeids, vaxis, R, verbose):
 def main():
 
     ############ Program arguments ############
-    parser = argparse.ArgumentParser( prog        = "compute_STable_hdf"
+    parser = argparse.ArgumentParser( prog        = f"{basename(__file__)}"
                                     , description = "description"
                                     , epilog      = """ The table variables are the following:
                                                     zs: source z position
